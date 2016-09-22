@@ -1,3 +1,10 @@
+## 0.0.7 - Upcoming version
+
+**Added:**
+- Compute Service - Added support to create virtual machine from a custom image.
+
+
+
 ## 0.0.6
 
 **Added:**
