@@ -128,7 +128,7 @@ module ApiStub
                 "provisioningState": "Succeeded"
               }
             }'
-          gateway_mapper = Azure::ARM::Network::Models::ApplicationGateway.mapper
+          gateway_mapper = Azure::Network::Profiles::Latest::Mgmt::Models::ApplicationGateway.mapper
           gateway_client.deserialize(gateway_mapper, Fog::JSON.decode(gateway), 'result.body')
         end
 

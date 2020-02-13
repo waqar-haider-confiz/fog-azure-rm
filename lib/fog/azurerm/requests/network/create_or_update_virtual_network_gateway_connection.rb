@@ -11,7 +11,10 @@ module Fog
           Fog::Logger.debug msg
           gateway_connection = get_network_gateway_connection_object(gateway_connection_params)
           begin
+            puts "hereeeeeeeeeeeeee? #{gateway_connection_params.inspect}"
+            puts "thereeeeeeeeeeeeee #{gateway_connection.inspect}"
             network_gateway_connection = @network_client.virtual_network_gateway_connections.create_or_update(gateway_connection_params[:resource_group_name], gateway_connection_params[:name], gateway_connection)
+            puts "helllooooooooooooooooooooooooooooooooo?"
           rescue MsRestAzure::AzureOperationError => e
             raise_azure_exception(e, msg)
           end
@@ -22,7 +25,7 @@ module Fog
         private
 
         def get_network_gateway_connection_object(gateway_connection_params)
-          gateway_connection = Azure::ARM::Network::Models::VirtualNetworkGatewayConnection.new
+          gateway_connection = Azure::Network::Profiles::Latest::Mgmt::Models::VirtualNetworkGatewayConnection.new
 
           gateway_connection.name = gateway_connection_params[:name]
           gateway_connection.location = gateway_connection_params[:location]
@@ -44,7 +47,7 @@ module Fog
           gateway_connection.egress_bytes_transferred = gateway_connection_params[:egress_bytes_transferred]
           gateway_connection.ingress_bytes_transferred = gateway_connection_params[:ingress_bytes_transferred]
           if gateway_connection_params[:peer]
-            peer = MsRestAzure::SubResource.new
+            peer = Azure::Resources::Profiles::Latest::Mgmt::Models::SubResource.new
             peer.id = gateway_connection_params[:peer]
             gateway_connection.peer = peer
           end
@@ -74,7 +77,7 @@ module Fog
               'connectivityState' => 'Connected'
             }
           }
-          connection_mapper = Azure::ARM::Network::Models::VirtualNetworkGatewayConnection.mapper
+          connection_mapper = Azure::Network::Profiles::Latest::Mgmt::Models::VirtualNetworkGatewayConnection.mapper
           @network_client.deserialize(connection_mapper, connection, 'result.body')
         end
       end

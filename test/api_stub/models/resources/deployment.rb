@@ -51,7 +51,7 @@ module ApiStub
               }]
             }
           }
-          result_mapper = Azure::ARM::Resources::Models::DeploymentExtended.mapper
+          result_mapper = Azure::Resources::Profiles::Latest::Mgmt::Models::DeploymentExtended.mapper
           client.deserialize(result_mapper, deployment, 'result.body')
         end
 
@@ -107,7 +107,7 @@ module ApiStub
               }
             ]
           }
-          result_mapper = Azure::ARM::Resources::Models::DeploymentListResult.mapper
+          result_mapper = Azure::Resources::Profiles::Latest::Mgmt::Models::DeploymentListResult.mapper
           client.deserialize(result_mapper, deployments, 'result.body').value
         end
       end

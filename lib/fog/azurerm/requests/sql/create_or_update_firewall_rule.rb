@@ -8,7 +8,7 @@ module Fog
           Fog::Logger.debug msg
 
           begin
-            server_firewall_rule = @sql_mgmt_client.servers.create_or_update_firewall_rule(firewall_hash[:resource_group], firewall_hash[:server_name], firewall_hash[:name], format_server_firewall_parameters(firewall_hash[:start_ip], firewall_hash[:end_ip]))
+            server_firewall_rule = @sql_mgmt_client.firewall_rules.create_or_update(firewall_hash[:resource_group], firewall_hash[:server_name], firewall_hash[:name], format_server_firewall_parameters(firewall_hash[:start_ip], firewall_hash[:end_ip]))
           rescue MsRestAzure::AzureOperationError => e
             raise_azure_exception(e, msg)
           end
@@ -19,7 +19,7 @@ module Fog
         private
 
         def format_server_firewall_parameters(start_ip, end_ip)
-          firewall_rule = Azure::ARM::SQL::Models::ServerFirewallRule.new
+          firewall_rule = Azure::SQL::Profiles::Latest::Mgmt::Models::FirewallRule.new
           firewall_rule.start_ip_address = start_ip
           firewall_rule.end_ip_address = end_ip
           firewall_rule

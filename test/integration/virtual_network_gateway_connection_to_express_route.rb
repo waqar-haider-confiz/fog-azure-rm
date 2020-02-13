@@ -32,12 +32,16 @@ begin
     location: LOCATION
   )
 
+  puts "1"
+
   network.virtual_networks.create(
     name: 'testVnet',
     location: LOCATION,
     resource_group: 'TestRG-GCE',
     network_address_list: '10.1.0.0/16,10.2.0.0/16'
   )
+
+  puts "2"
 
   network.subnets.create(
     name: 'GatewaySubnet',
@@ -46,12 +50,16 @@ begin
     address_prefix: '10.2.0.0/24'
   )
 
+  puts "3"
+
   network.public_ips.create(
     name: 'mypubip',
     resource_group: 'TestRG-GCE',
     location: LOCATION,
     public_ip_allocation_method: Fog::ARM::Network::Models::IPAllocationMethod::Dynamic
   )
+
+  puts "4"
 
   network.virtual_network_gateways.create(
     name: 'testnetworkgateway',
@@ -80,6 +88,8 @@ begin
     vpn_client_address_pool: nil
   )
 
+  puts "5"
+
   ########################################################################################################################
   ###############          Create Virtual Network Gateway Connection to Express Route Circuit                  ###########
   ########################################################################################################################
@@ -93,10 +103,12 @@ begin
       resource_group: 'TestRG-GCE'
     },
     # Please provide Provisioned Express Route Circuit resource id below
-    peer: "/subscriptions/#{azure_credentials['subscription_id']}/resourceGroup/TestRG-GCE/providers/Microsoft.Network/expressRouteCircuits/[circuit_name]",
+    peer: "/subscriptions/8339d243-d139-4e55-addf-e94fd402d8ff/resourceGroups/TestRG-ER/providers/Microsoft.Network/expressRouteCircuits/testERCircuit",
     connection_type: 'ExpressRoute'
   )
   puts "Created virtual network gateway connection to express route circuit: #{connection.name}"
+
+  puts "6"
 
   ########################################################################################################################
   ######################                                       CleanUp                             #######################
@@ -117,7 +129,8 @@ begin
 
   resource_group = resource.resource_groups.get('TestRG-GCE')
   resource_group.destroy
-rescue
+rescue Exception => ex
+  puts ex.inspect
   puts 'Integration Test for virtual network gateway connection to express route circuit is failing'
   resource_group.destroy unless resource_group.nil?
 end

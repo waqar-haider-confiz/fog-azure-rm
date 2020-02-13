@@ -7,7 +7,7 @@ module Fog
           msg = "Listing Resources in #{resource_group_name}"
           Fog::Logger.debug msg
           begin
-            resources = @rmc.resource_groups.list_resources(resource_group_name)
+            resources = @rmc.resources.list_by_resource_group(resource_group_name)
           rescue MsRestAzure::AzureOperationError => e
             raise_azure_exception(e, msg)
           end
@@ -33,7 +33,7 @@ module Fog
                 'name' => 'free'
               }
           }
-          result_mapper = Azure::ARM::Resources::Models::GenericResource.mapper
+          result_mapper = Azure::Resources::Profiles::Latest::Mgmt::Models::GenericResource.mapper
           @rmc.deserialize(result_mapper, resources, 'result.body').value
         end
       end

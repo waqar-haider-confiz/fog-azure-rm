@@ -85,7 +85,8 @@ begin
   resource_group = resource.resource_groups.get('TestRG-LNG')
   resource_group.destroy
   puts 'Integration Test for local network gateway ran successfully'
-rescue
+rescue Exception => ex
+  puts ex.inspect
   puts 'Integration Test for local network gateway is failing'
   resource_group.destroy unless resource_group.nil?
 end

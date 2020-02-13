@@ -37,7 +37,7 @@ disk_name           = "MD#{time}"
 ########################################################################################################################
 
 begin
-  rs.resource_groups.create(
+  resource_group = rs.resource_groups.create(
     name: resource_group_name,
     location: LOCATION
   )
@@ -112,7 +112,8 @@ begin
   rg.destroy
 
   puts 'Integration Test for managed disk ran successfully!'
-rescue
+rescue Exception => ex
+  puts ex.inspect
   puts 'Integration Test for managed disk is failing!'
   resource_group.destroy unless resource_group.nil?
 end

@@ -8,7 +8,7 @@ module Fog
           msg = "Getting storage access keys for storage account: #{storage_account_name}, #{options}."
           Fog::Logger.debug msg
           begin
-            storage_account_keys = @storage_mgmt_client.storage_accounts.list_keys(resource_group, storage_account_name, options)
+            storage_account_keys = @storage_mgmt_client.storage_accounts.list_keys(resource_group, storage_account_name, custom_headers: options)
           rescue MsRestAzure::AzureOperationError => ex
             raise_azure_exception(ex, msg)
           end

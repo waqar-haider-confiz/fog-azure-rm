@@ -93,7 +93,8 @@ begin
   resource_group = resources.resource_groups.get('TestRG-KV')
   resource_group.destroy
   puts 'Integration Test for key vault ran successfully'
-rescue
+rescue Exception => ex
+  puts ex.inspect
   puts 'Integration Test for key vault is failing'
   resource_group.destroy unless resource_group.nil?
 end

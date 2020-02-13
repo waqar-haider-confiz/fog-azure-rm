@@ -150,7 +150,8 @@ begin
   resource_group = rs.resource_groups.get('TestRG-LB')
   resource_group.destroy
   puts 'Integration Test for external load balancer ran successfully'
-rescue
+rescue Exception => ex
+  puts ex.inspect
   puts 'Integration Test for external load balancer is failing'
   resource_group.destroy unless resource_group.nil?
 end

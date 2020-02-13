@@ -9,13 +9,14 @@ module Fog
           unless tag_name.nil?
             query_filter = "tagname eq '#{tag_name}' "
             query_filter += tag_value.nil? ? '' : "and tagvalue eq '#{tag_value}'"
+            puts "2 #{query_filter.inspect}"
             begin
-              resources = @rmc.resources.list_as_lazy(query_filter)
+              resources = @rmc.resources.list(filter: query_filter)
+              puts "hehehehehhehe #{resources.inspect}"
             rescue MsRestAzure::AzureOperationError => e
               raise_azure_exception(e, msg)
             end
-            resources.next_link = '' if resources.next_link.nil?
-            resources.value
+            resources
           end
         end
       end
@@ -41,7 +42,7 @@ module Fog
               }
             ]
           }
-          result_mapper = Azure::ARM::Resources::Models::ResourceListResult.mapper
+          result_mapper = Azure::Resources::Profiles::Latest::Mgmt::Models::ResourceListResult.mapper
           @rmc.deserialize(result_mapper, resources, 'result.body').value
         end
       end

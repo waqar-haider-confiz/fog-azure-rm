@@ -151,6 +151,8 @@ begin
     gateway_default_site: "/subscriptions/#{azure_credentials['subscription_id']}/resourceGroups/TestRG-GC/providers/Microsoft.Network/localNetworkGateways/testlocalnetworkgateway"
   )
 
+  puts "herreeeeeeeeeeeeeeeeeeee?"
+
   ########################################################################################################################
   ######################            Check Virtual Network Gateway Connection Exists                 ######################
   ########################################################################################################################
@@ -215,7 +217,8 @@ begin
 
   resource_group = resource.resource_groups.get('TestRG-GC')
   resource_group.destroy
-rescue
+rescue Exception => ex
+  puts ex.inspect
   puts 'Integration Test for virtual network gateway connection is failing'
   resource_group.destroy unless resource_group.nil?
 end

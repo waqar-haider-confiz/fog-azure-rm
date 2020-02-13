@@ -60,8 +60,8 @@ begin
     bandwidth_in_mbps: 100,
     peerings: [
       {
-        name: 'AzurePublicPeering',
-        peering_type: 'AzurePublicPeering',
+        name: 'AzurePrivatePeering',
+        peering_type: 'AzurePrivatePeering',
         peer_asn: 100,
         primary_peer_address_prefix: '192.168.1.0/30',
         secondary_peer_address_prefix: '192.168.2.0/30',
@@ -115,25 +115,26 @@ begin
     puts auth.name
   end
 
-  ########################################################################################################################
-  ######################                Destroy Express Route Circuit Authorization                   ####################
-  ########################################################################################################################
-  authorization = network.express_route_circuit_authorizations.get('TestRG-ER', 'testERCircuit', 'Test-Auth')
-  puts "Deleted express route circuit authorization: #{authorization.destroy}"
+  # ########################################################################################################################
+  # ######################                Destroy Express Route Circuit Authorization                   ####################
+  # ########################################################################################################################
+  # authorization = network.express_route_circuit_authorizations.get('TestRG-ER', 'testERCircuit', 'Test-Auth')
+  # puts "Deleted express route circuit authorization: #{authorization.destroy}"
 
-  ########################################################################################################################
-  ######################                   Destroy Express Route Circuit                            ######################
-  ########################################################################################################################
-  circuit = network.express_route_circuits.get('TestRG-ER', 'testERCircuit')
-  puts "Deleted express route circuit: #{circuit.destroy}"
+  # ########################################################################################################################
+  # ######################                   Destroy Express Route Circuit                            ######################
+  # ########################################################################################################################
+  # circuit = network.express_route_circuits.get('TestRG-ER', 'testERCircuit')
+  # puts "Deleted express route circuit: #{circuit.destroy}"
 
   ########################################################################################################################
   ######################                         CleanUp                                            ######################
   ########################################################################################################################
   resource_group = resources.resource_groups.get('TestRG-ER')
-  resource_group.destroy
+  #resource_group.destroy
   puts 'Integration Test for express route circuit ran successfully'
-rescue
+rescue Exception => ex
+  puts ex.inspect
   puts 'Integration Test for express route circuit is failing'
   resource_group.destroy unless resource_group.nil?
 end

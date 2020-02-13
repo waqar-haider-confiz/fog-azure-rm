@@ -46,7 +46,7 @@ begin
   tags = { key1: 'value1', key2: 'value2' }
 
   traffic_manager_profile = traffic_manager.traffic_manager_profiles.create(
-    name: 'test-tmp',
+    name: 'test-tmp-maham',
     resource_group: 'TestRG-TM',
     tags: tags,
     traffic_routing_method: 'Performance',
@@ -54,16 +54,7 @@ begin
     ttl: '30',
     protocol: 'http',
     port: '80',
-    path: '/monitorpage.aspx',
-    endpoints: [{
-      name: 'endpoint1',
-      type: 'externalEndpoints',
-      target: 'test-app.com',
-      endpoint_location: 'eastus',
-      endpoint_status: 'Enabled',
-      priority: 5,
-      weight: 10
-    }]
+    path: '/monitorpage.aspx'
   )
   puts "Created traffic manager profile: #{traffic_manager_profile.name}"
 
@@ -81,7 +72,7 @@ begin
   traffic_manager_end_point = traffic_manager.traffic_manager_end_points.create(
     name: 'myendpoint',
     resource_group: 'TestRG-TM',
-    traffic_manager_profile_name: 'test-tmp',
+    traffic_manager_profile_name: 'test-tmp-maham',
     type: 'externalEndpoints',
     target: 'test-app1.com',
     endpoint_location: 'eastus'
@@ -92,7 +83,7 @@ begin
   ######################                   Get and Update Traffic Manager Endpoint                ######################
   ########################################################################################################################
 
-  end_point = traffic_manager.traffic_manager_end_points.get('TestRG-TM', 'test-tmp', 'myendpoint', 'externalEndpoints')
+  end_point = traffic_manager.traffic_manager_end_points.get('TestRG-TM', 'test-tmp-maham', 'myendpoint', 'externalEndpoints')
   puts "Get traffic manager endpoint: #{end_point.name}"
   end_point.update(
     type: 'externalEndpoints',
@@ -105,19 +96,20 @@ begin
   ######################                   Get and Destroy Traffic Manager Endpoint                ######################
   ########################################################################################################################
 
-  end_point = traffic_manager.traffic_manager_end_points.get('TestRG-TM', 'test-tmp', 'myendpoint', 'externalEndpoints')
-  puts "Deleted traffic manager endpoint: #{end_point.destroy}"
+  end_point = traffic_manager.traffic_manager_end_points.get('TestRG-TM', 'test-tmp-maham', 'myendpoint', 'externalEndpoints')
+  # puts "Deleted traffic manager endpoint: #{end_point.destroy}"
 
-  ########################################################################################################################
-  ######################                    Get and Update Traffic Manager Profile                 ######################
-  ########################################################################################################################
+  #######################################################################################################################
+  #####################                    Get and Update Traffic Manager Profile                 ######################
+  #######################################################################################################################
 
-  traffic_manager_profile = traffic_manager.traffic_manager_profiles.get('TestRG-TM', 'test-tmp')
+  traffic_manager_profile = traffic_manager.traffic_manager_profiles.get('TestRG-TM', 'test-tmp-maham')
   puts "Get traffic manager profile: #{traffic_manager_profile.name}"
   traffic_manager_profile.update(traffic_routing_method: 'Weighted',
                                  ttl: '35',
                                  protocol: 'https',
                                  port: '90',
+                                 endpoints: [end_point],
                                  path: '/monitorpage1.aspx')
   puts 'Updated traffic manager profile'
 
@@ -125,18 +117,19 @@ begin
   ######################                    Get and Destroy Traffic Manager Profile                 ######################
   ########################################################################################################################
 
-  traffic_manager_profile = traffic_manager.traffic_manager_profiles.get('TestRG-TM', 'test-tmp')
-  puts "Deleted traffic manager profile: #{traffic_manager_profile.destroy}"
+  # traffic_manager_profile = traffic_manager.traffic_manager_profiles.get('TestRG-TM', 'test-tmp-maham')
+  # puts "Deleted traffic manager profile: #{traffic_manager_profile.destroy}"
 
   ########################################################################################################################
   ######################                                   CleanUp                                  ######################
   ########################################################################################################################
 
   resource_group = resources.resource_groups.get('TestRG-TM')
-  resource_group.destroy
+  #resource_group.destroy
 
   puts 'Integration test for Traffic Manager ran successfully!'
-rescue
+rescue Exception => ex
+  puts ex.inspect
   puts 'Integration Test for traffic manager is failing'
   resource_group.destroy unless resource_group.nil?
 end

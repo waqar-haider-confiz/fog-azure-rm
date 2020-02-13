@@ -49,6 +49,7 @@ def get_record_type(type)
 end
 
 def raise_azure_exception(exception, msg)
+  puts exception.inspect
   raise Fog::AzureRM::CustomAzureCoreHttpError.new(exception) if exception.is_a?(Azure::Core::Http::HTTPError)
   raise exception unless exception.is_a?(MsRestAzure::AzureOperationError)
 
@@ -97,7 +98,7 @@ def resource_manager_endpoint_url(environment = ENVIRONMENT_AZURE_CLOUD)
   when ENVIRONMENT_AZURE_GERMAN_CLOUD
     MsRestAzure::AzureEnvironments::AzureGermanCloud.resource_manager_endpoint_url
   else
-    MsRestAzure::AzureEnvironments::Azure.resource_manager_endpoint_url
+    MsRestAzure::AzureEnvironments::AzureCloud.resource_manager_endpoint_url
   end
 end
 

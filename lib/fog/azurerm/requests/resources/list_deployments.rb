@@ -7,12 +7,13 @@ module Fog
           msg = "Listing Deployments in Resource Group: #{resource_group}"
           Fog::Logger.debug msg
           begin
-            deployments = @rmc.deployments.list_as_lazy(resource_group)
+            deployments = @rmc.deployments.list_by_resource_group(resource_group)
+            puts deployments.inspect
           rescue  MsRestAzure::AzureOperationError => e
             raise_azure_exception(e, msg)
           end
           Fog::Logger.debug "Deployments listed successfully in Resource Group: #{resource_group}"
-          deployments.value
+          deployments
         end
       end
 
@@ -68,7 +69,7 @@ module Fog
               }
             }]
           }
-          result_mapper = Azure::ARM::Resources::Models::DeploymentListResult.mapper
+          result_mapper = Azure::Resources::Profiles::Latest::Mgmt::Models::DeploymentListResult.mapper
           @rmc.deserialize(result_mapper, deployments, 'result.body').value
         end
       end

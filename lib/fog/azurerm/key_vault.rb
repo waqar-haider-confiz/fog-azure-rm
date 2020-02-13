@@ -42,8 +42,8 @@ module Fog
           end
 
           credentials = Fog::Credentials::AzureRM.get_credentials(options[:tenant_id], options[:client_id], options[:client_secret])
-          @key_vault_client = ::Azure::ARM::KeyVault::KeyVaultManagementClient.new(credentials)
-          @key_vault_client.subscription_id = options[:subscription_id]
+          options[:credentials] = credentials
+          @key_vault_client = ::Azure::KeyVault::Profiles::Latest::Mgmt::Client.new(options)
         end
       end
     end

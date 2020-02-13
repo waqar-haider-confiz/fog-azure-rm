@@ -4,14 +4,18 @@ module Fog
       # Real class for Network Request
       class Real
         def create_or_update_express_route_circuit(circuit_parameters)
+          puts "do I get here????????????/"
           msg = "Creating/updating Express Route Circuit #{circuit_parameters[:circuit_name]} in Resource Group: #{circuit_parameters[:resource_group_name]}."
           Fog::Logger.debug msg
           circuit = get_express_route_circuit_object(circuit_parameters)
+          puts "hereeeeeeeeeeeeeeeeeeeeee? #{circuit_parameters.inspect}"
           begin
             circuit = @network_client.express_route_circuits.create_or_update(circuit_parameters[:resource_group_name], circuit_parameters[:circuit_name], circuit)
+            puts "hhhhhhhhhhhhh #{circuit.inspect}"
           rescue MsRestAzure::AzureOperationError => e
             raise_azure_exception(e, msg)
           end
+          puts "but not hereeeeeee?"
           Fog::Logger.debug "Express Route Circuit #{circuit_parameters[:circuit_name]} created/updated successfully."
           circuit
         end
@@ -25,7 +29,7 @@ module Fog
         end
 
         def create_express_route_circuit_sku(sku_name, sku_family, sku_tier)
-          sku = Azure::ARM::Network::Models::ExpressRouteCircuitSku.new
+          sku = Azure::Network::Profiles::Latest::Mgmt::Models::ExpressRouteCircuitSku.new
           sku.name = sku_name
           sku.family = sku_family
           sku.tier = sku_tier
@@ -33,7 +37,7 @@ module Fog
         end
 
         def create_express_route_service_provider_properties(service_provider_name, peering_location, bandwidth_in_mbps)
-          service_provider_prop = Azure::ARM::Network::Models::ExpressRouteCircuitServiceProviderProperties.new
+          service_provider_prop = Azure::Network::Profiles::Latest::Mgmt::Models::ExpressRouteCircuitServiceProviderProperties.new
           service_provider_prop.service_provider_name = service_provider_name
           service_provider_prop.peering_location = peering_location
           service_provider_prop.bandwidth_in_mbps = bandwidth_in_mbps
@@ -41,7 +45,7 @@ module Fog
         end
 
         def create_express_route_circuit(service_provider_prop, peerings, circuit_name, location, sku, tags)
-          express_route_circuit = Azure::ARM::Network::Models::ExpressRouteCircuit.new
+          express_route_circuit = Azure::Network::Profiles::Latest::Mgmt::Models::ExpressRouteCircuit.new
           express_route_circuit.service_provider_properties = service_provider_prop
           express_route_circuit.peerings = get_circuit_peerings(peerings) if peerings
           express_route_circuit.name = circuit_name
@@ -61,7 +65,7 @@ module Fog
         end
 
         def create_express_route_circuit_peering(peering_type, peer_asn, primary_peer_address_prefix, secondary_peer_address_prefix, vlan_id, name)
-          circuit_peering = Azure::ARM::Network::Models::ExpressRouteCircuitPeering.new
+          circuit_peering = Azure::Network::Profiles::Latest::Mgmt::Models::ExpressRouteCircuitPeering.new
           circuit_peering.peering_type = peering_type
           circuit_peering.peer_asn = peer_asn
           circuit_peering.primary_peer_address_prefix = primary_peer_address_prefix
@@ -72,7 +76,7 @@ module Fog
         end
 
         def create_express_route_circuit_peering_config(advertised_public_prefixes, advertised_public_prefix_state, customer_asn, routing_registry_name)
-          peering_config = Azure::ARM::Network::Models::ExpressRouteCircuitPeeringConfig.new
+          peering_config = Azure::Network::Profiles::Latest::Mgmt::Models::ExpressRouteCircuitPeeringConfig.new
           peering_config.advertised_public_prefixes = advertised_public_prefixes
           peering_config.advertised_public_prefixes_state = advertised_public_prefix_state
           peering_config.customer_asn = customer_asn

@@ -8,7 +8,7 @@ module Fog
           Fog::Logger.debug msg
 
           begin
-            firewall_rule = @sql_mgmt_client.servers.get_firewall_rule(resource_group, server_name, rule_name)
+            firewall_rule = @sql_mgmt_client.firewall_rules.get(resource_group, server_name, rule_name)
           rescue MsRestAzure::AzureOperationError => e
             raise_azure_exception(e, msg)
           end

@@ -5,13 +5,11 @@ module Fog
       class EncryptionSettings < Fog::Model
         attribute :key_url
         attribute :secret_url
-        attribute :enabled
         attribute :key_source_vault_id
         attribute :disk_source_vault_id
 
         def self.parse(encryption_settings)
           settings = {}
-          settings['enabled'] = encryption_settings.enabled
 
           if encryption_settings.disk_encryption_key
             settings['secret_url'] = encryption_settings.disk_encryption_key.secret_url

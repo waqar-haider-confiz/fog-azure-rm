@@ -63,10 +63,13 @@ begin
   ########################################################################################################################
 
   a_resources = resources.azure_resources(tag_name: 'test-key', tag_value: 'test-value')
+  puts "hahahahahaha #{a_resources.inspect}"
   puts 'List resources in a tag:'
   a_resources.each do |resource|
     puts resource.name
   end
+
+  puts "herrrrrrrreeeeeeeee?"
 
   resource = resources.azure_resources(tag_name: 'test-key').get(resource_id)
   puts "Get resource in a tag: #{resource.name}"
@@ -87,7 +90,8 @@ begin
   ########################################################################################################################
 
   resource_group.destroy
-rescue
+rescue Exception => ex
+  puts ex.inspect
   puts 'Integration Test for tagging a resource is failing'
-  resource_group.destroy unless resource_group.nil?
+  #resource_group.destroy unless resource_group.nil?
 end

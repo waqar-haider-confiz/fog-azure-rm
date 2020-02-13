@@ -254,7 +254,8 @@ begin
   resource_group.destroy
 
   puts 'Integration Test for application gateway ran successfully'
-rescue
+rescue Exception => ex
+  puts ex.inspect
   puts 'Integration Test for application gateway is failing'
   resource_group.destroy unless resource_group.nil?
 end

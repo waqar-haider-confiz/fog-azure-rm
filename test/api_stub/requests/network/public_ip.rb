@@ -27,7 +27,7 @@ module ApiStub
                 }
              }
           }'
-          public_ip_mapper = Azure::ARM::Network::Models::PublicIPAddress.mapper
+          public_ip_mapper = Azure::Network::Profiles::Latest::Mgmt::Models::PublicIPAddress.mapper
           network_client.deserialize(public_ip_mapper, Fog::JSON.decode(body), 'result.body')
         end
 
@@ -58,7 +58,7 @@ module ApiStub
               }
             } ]
           }'
-          public_ip_mapper = Azure::ARM::Network::Models::PublicIPAddressListResult.mapper
+          public_ip_mapper = Azure::Network::Profiles::Latest::Mgmt::Models::PublicIPAddressListResult.mapper
           network_client.deserialize(public_ip_mapper, Fog::JSON.decode(body), 'result.body')
         end
 

@@ -51,7 +51,7 @@ begin
     resource_group: 'TestRG-SQL',
     location: LOCATION,
     tags: tags,
-    version: '2.0',
+    version: '12.0',
     administrator_login: 'testserveradmin',
     administrator_login_password: 'db@admin=123'
   )
@@ -177,7 +177,8 @@ begin
   resource_group.destroy
 
   puts 'Integration test for SQL ran successfully!'
-rescue
+rescue Exception => ex
+  puts ex.inspect
   puts 'Integration Test for sql server is failing'
   resource_group.destroy unless resource_group.nil?
 end

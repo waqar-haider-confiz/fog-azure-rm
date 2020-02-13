@@ -99,11 +99,13 @@ begin
     private_ip_allocation_method: Fog::ARM::Network::Models::IPAllocationMethod::Dynamic
   )
 
+  puts "hereeeeeeeeee"
+
   ########################################################################################################################
   ######################                                Create Server                               ######################
   ########################################################################################################################
 
-  vhd_path = 'https://myblob.blob.core.windows.net/vhds/my_vhd.vhd'.freeze
+  vhd_path = 'https://sa15694044664097457.blob.core.windows.net/vhds/TestVM_os_disk.vhd'.freeze
 
   custom_image_virtual_machine = compute.servers.create(
     name: 'TestVM',
@@ -137,7 +139,7 @@ begin
     network_interface_card_ids: ["/subscriptions/#{azure_credentials['subscription_id']}/resourceGroups/#{RG_NAME}/providers/Microsoft.Network/networkInterfaces/NetInt2"],
     platform: 'linux',
     vhd_path: vhd_path,
-    managed_disk_storage_type: Azure::ARM::Compute::Models::StorageAccountTypes::StandardLRS
+    managed_disk_storage_type: Azure::Compute::Profiles::Latest::Mgmt::Models::StorageAccountTypes::StandardLRS
   )
 
   puts "Created custom image managed virtual machine: #{custom_image_virtual_machine_managed.name}"
@@ -160,7 +162,7 @@ begin
     network_interface_card_ids: ["/subscriptions/#{azure_credentials['subscription_id']}/resourceGroups/#{RG_NAME}/providers/Microsoft.Network/networkInterfaces/NetInt3"],
     platform: 'linux',
     vhd_path: vhd_path,
-    managed_disk_storage_type: Azure::ARM::Compute::Models::StorageAccountTypes::StandardLRS
+    managed_disk_storage_type: Azure::Compute::Profiles::Latest::Mgmt::Models::StorageAccountTypes::StandardLRS
   )
 
   loop do
@@ -180,9 +182,9 @@ begin
     end
   end
 
-  ########################################################################################################################
-  ######################                            Get and Delete Server                           ######################
-  ########################################################################################################################
+  #######################################################################################################################
+  #####################                            Get and Delete Server                           ######################
+  #######################################################################################################################
 
   custom_image_virtual_machine = compute.servers.get(RG_NAME, 'TestVM')
   puts "Get custom image un-managed virtual machine: #{custom_image_virtual_machine.name}"
@@ -221,7 +223,8 @@ begin
   resource_group.destroy
 
   puts 'Integration Test for virtual machine ran successfully!'
-rescue
+rescue Exception => ex
+  puts ex.inspect
   puts 'Integration Test for custom image virtual machine is failing'
-  resource_group.destroy unless resource_group.nil?
+  #resource_group.destroy unless resource_group.nil?
 end

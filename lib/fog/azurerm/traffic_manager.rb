@@ -40,9 +40,9 @@ module Fog
           options[:environment] = 'AzureCloud' if options[:environment].nil?
 
           credentials = Fog::Credentials::AzureRM.get_credentials(options[:tenant_id], options[:client_id], options[:client_secret], options[:environment])
+          options[:credentials] = credentials
           telemetry = "fog-azure-rm/#{Fog::AzureRM::VERSION}"
-          @traffic_mgmt_client = ::Azure::ARM::TrafficManager::TrafficManagerManagementClient.new(credentials, resource_manager_endpoint_url(options[:environment]))
-          @traffic_mgmt_client.subscription_id = options[:subscription_id]
+          @traffic_mgmt_client = ::Azure::TrafficManager::Profiles::Latest::Mgmt::Client.new(options)
           @traffic_mgmt_client.add_user_agent_information(telemetry)
         end
       end

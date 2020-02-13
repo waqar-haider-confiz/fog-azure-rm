@@ -11,10 +11,14 @@ module Fog
                                                              server_hash[:administrator_login],
                                                              server_hash[:administrator_login_password],
                                                              server_hash[:tags])
+
+                                                             puts "params #{formatted_server_params.inspect}"
           begin
             sql_server = @sql_mgmt_client.servers.create_or_update(server_hash[:resource_group],
                                                                    server_hash[:name],
                                                                    formatted_server_params)
+
+                                                                   puts "hereeeeeeeeeeeee?"
           rescue MsRestAzure::AzureOperationError => e
             raise_azure_exception(e, msg)
           end
@@ -25,12 +29,11 @@ module Fog
         private
 
         def format_server_parameters(location, version, admin_login, admin_password, tags)
-          server = Azure::ARM::SQL::Models::Server.new
+          server = Azure::SQL::Profiles::Latest::Mgmt::Models::Server.new
           server.version = version
           server.location = location
           server.administrator_login = admin_login
           server.administrator_login_password = admin_password
-          server.tags = tags
           server
         end
       end

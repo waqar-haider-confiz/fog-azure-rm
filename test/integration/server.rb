@@ -56,6 +56,8 @@ begin
     replication: 'LRS'
   )
 
+  puts "1"
+
   network.virtual_networks.create(
     name: 'testVnet',
     location: LOCATION,
@@ -63,12 +65,16 @@ begin
     network_address_list: '10.1.0.0/16,10.2.0.0/16'
   )
 
+  puts "2"
+
   network.subnets.create(
     name: 'mysubnet',
     resource_group: 'TestRG-VM',
     virtual_network_name: 'testVnet',
     address_prefix: '10.2.0.0/24'
   )
+
+  puts "3"
 
   network.network_interfaces.create(
     name: 'NetInt',
@@ -79,6 +85,8 @@ begin
     private_ip_allocation_method: Fog::ARM::Network::Models::IPAllocationMethod::Dynamic
   )
 
+  puts "4"
+
   network.network_interfaces.create(
     name: 'NetInt2',
     resource_group: 'TestRG-VM',
@@ -87,6 +95,8 @@ begin
     ip_configuration_name: 'testIpConfiguration',
     private_ip_allocation_method: Fog::ARM::Network::Models::IPAllocationMethod::Dynamic
   )
+
+  puts "hereeeee?"
 
   ########################################################################################################################
   ######################                            Check for Virtual Machine                       ######################
@@ -135,7 +145,7 @@ begin
     location: LOCATION,
     resource_group: 'TestRG-VM',
     vm_size: 'Standard_B2s',
-    storage_account_name: nil,
+    storage_account_name: storage_account_name,
     username: 'testuser',
     password: 'Confiz=123',
     disable_password_authentication: false,
@@ -147,7 +157,7 @@ begin
     platform: 'linux',
     custom_data: 'echo customData',
     os_disk_caching: Fog::ARM::Compute::Models::CachingTypes::None,
-    managed_disk_storage_type: Azure::ARM::Compute::Models::StorageAccountTypes::StandardLRS
+    managed_disk_storage_type: Azure::Compute::Profiles::Latest::Mgmt::Models::StorageAccountTypes::StandardLRS
   )
   puts "Created managed virtual machine: #{managed_vm.name}"
 
@@ -392,7 +402,8 @@ begin
   resource_group.destroy
 
   puts 'Integration Test for virtual machine ran successfully!'
-rescue
+rescue Exception => ex
+  puts ex.inspect
   puts 'Integration Test for virtual machine is failing!'
   resource_group.destroy unless resource_group.nil?
 end

@@ -14,10 +14,12 @@ module Fog
                                                   profile_hash[:path],
                                                   profile_hash[:endpoints],
                                                   profile_hash[:tags])
+                                                  puts "lalalalalalala #{profile_parameters.inspect}\n\n"
           begin
             traffic_manager_profile = @traffic_mgmt_client.profiles.create_or_update(profile_hash[:resource_group],
                                                                                      profile_hash[:name],
                                                                                      profile_parameters)
+                                                                                     puts "hereeeeeeeeeee?"
           rescue MsRestAzure::AzureOperationError => e
             raise_azure_exception(e, msg)
           end
@@ -28,13 +30,14 @@ module Fog
         private
 
         def get_profile_object(traffic_routing_method, relative_name, ttl, protocol, port, path, endpoints, tags)
-          traffic_manager_profile = Azure::ARM::TrafficManager::Models::Profile.new
+          traffic_manager_profile = Azure::TrafficManager::Profiles::Latest::Mgmt::Models::Profile.new
           traffic_manager_profile.traffic_routing_method = traffic_routing_method
           traffic_manager_profile.location = GLOBAL
+          traffic_manager_profile.profile_status = Azure::TrafficManager::Profiles::Latest::Mgmt::Models::ProfileStatus::Enabled
 
           traffic_manager_profile.dns_config = get_traffic_manager_dns_config(relative_name, ttl)
           traffic_manager_profile.monitor_config = get_traffic_manager_monitor_config(protocol, port, path)
-          traffic_manager_profile.endpoints = get_endpoints(endpoints) unless endpoints.nil?
+          traffic_manager_profile.endpoints = endpoints unless endpoints.nil?
           traffic_manager_profile.tags = tags
           traffic_manager_profile
         end
@@ -52,14 +55,14 @@ module Fog
         end
 
         def get_traffic_manager_dns_config(relative_name, ttl)
-          traffic_manager_dns_config = Azure::ARM::TrafficManager::Models::DnsConfig.new
+          traffic_manager_dns_config = Azure::TrafficManager::Profiles::Latest::Mgmt::Models::DnsConfig.new
           traffic_manager_dns_config.relative_name = relative_name
           traffic_manager_dns_config.ttl = ttl
           traffic_manager_dns_config
         end
 
         def get_traffic_manager_monitor_config(protocol, port, path)
-          traffic_manager_monitor_config = Azure::ARM::TrafficManager::Models::MonitorConfig.new
+          traffic_manager_monitor_config = Azure::TrafficManager::Profiles::Latest::Mgmt::Models::MonitorConfig.new
           traffic_manager_monitor_config.path = path
           traffic_manager_monitor_config.protocol = protocol
           traffic_manager_monitor_config.port = port
@@ -121,7 +124,7 @@ module Fog
               ]
             }
           }
-          profile_mapper = Azure::ARM::TrafficManager::Models::Profile.mapper
+          profile_mapper = Azure::TrafficManager::Profiles::Latest::Mgmt::Models::Profile.mapper
           @traffic_mgmt_client.deserialize(profile_mapper, profile, 'result.body')
         end
       end

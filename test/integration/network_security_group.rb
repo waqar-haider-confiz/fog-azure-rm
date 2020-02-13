@@ -128,7 +128,8 @@ begin
   rg = rs.resource_groups.get('TestRG-NSG')
   rg.destroy
   puts 'Integration Test for network security group ran successfully'
-rescue
+rescue Exception => ex
+  puts ex.inspect
   puts 'Integration Test for network security group is failing'
   resource_group.destroy unless resource_group.nil?
 end

@@ -7,7 +7,7 @@ module Fog
           msg = "Getting Sql Server: #{server_name} in Resource Group: #{resource_group}..."
           Fog::Logger.debug msg
           begin
-            sql_server = @sql_mgmt_client.servers.get_by_resource_group(resource_group, server_name)
+            sql_server = @sql_mgmt_client.servers.get(resource_group, server_name)
           rescue MsRestAzure::AzureOperationError => e
             raise_azure_exception(e, msg)
           end

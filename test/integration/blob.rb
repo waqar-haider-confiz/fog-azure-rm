@@ -42,12 +42,15 @@ begin
     name: resource_group_name,
     location: LOCATION
   )
+  puts "1"
 
   storage_account = storage.storage_accounts.create(
     name: storage_account_name,
     location: LOCATION,
     resource_group: resource_group_name
   )
+
+  puts "2"
 
   access_key = storage_account.get_access_keys[0].value
   Fog::Logger.debug access_key.inspect

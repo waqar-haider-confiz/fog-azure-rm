@@ -72,7 +72,8 @@ begin
   ########################################################################################################################
 
   resource_group.destroy
-rescue
+rescue Exception => ex
+  puts ex.inspect
   puts 'Integration Test for deployment is failing'
   resource_group.destroy unless resource_group.nil?
 end

@@ -22,7 +22,7 @@ module ApiStub
               "connectivityState": "Connected"
             }
           }'
-          connection_mapper = Azure::ARM::Network::Models::VirtualNetworkGatewayConnection.mapper
+          connection_mapper = Azure::Network::Profiles::Latest::Mgmt::Models::VirtualNetworkGatewayConnection.mapper
           network_client.deserialize(connection_mapper, Fog::JSON.decode(gateway_connection), 'result.body')
         end
       end
